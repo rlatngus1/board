@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="detailFragment" id="detailFragment">
+    <style>
+        #detailFragment{
+
+            position: relative;
+            width: 1000px;
+            left: calc(50% - 500px);
+            >.article_table{
+                width: 100%;
+
+                >div{
+                    position: relative;
+                    width: 100%;
+
+                    >.title{
+                        font-size: 45px;
+                        font-weight: 700;
+                        padding-left: 20px;
+                        padding-top: 20px;
+                    }
+                    >.writer{
+                        font-size: 15px;
+                        padding-left: 20px;
+                        padding-top: 20px;
+
+                    }
+                    >.writedate{
+                        font-size: 15px;
+                        padding-left: 10px;
+                    }
+                }
+                >.cntdiv{
+                    position: relative;
+                    height: 30px;
+
+                    >span{
+                        position: absolute;
+                        height: 100%;
+                        display: flex;
+                        font-size: 15px;
+
+                    }
+                    >.viewcntlabel{
+                        width: 84%;
+
+                        justify-content: right;
+                        align-items: end;
+                    }
+                    >.viewcnt{
+                        width: 15%;
+
+                        right: 0;
+                        justify-content: left;
+                        font-size: 20px;
+                        color: #3366CC;
+                        font-weight: 600;
+
+                    }
+
+                }
+                >.articlediv{
+                    min-height: 600px;
+                    font-size: 20px;
+
+                }
+            }
+
+            >.likedislike{
+                position: relative;
+                width: 100%;
+
+                height: 150px;
+                >div{
+                    width: 50%;
+                    height: 100%;
+                    position: absolute;
+                    >div{
+                        position: absolute;
+                        height: 100%;
+                        width: 15%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        font-size: 50px;
+                    }
+                }
+                >.likediv{
+                    left: 0;
+                    display: flex;
+
+                    >.likecnt{
+                        right: 20%;
+
+                    }
+                    >.likebtn{
+                        right: 2%;
+                    }
+                }
+                >.dislikediv{
+                    right: 0;
+                    display: flex;
+
+                    >.dislikebtn{
+                        left: 2%;
+                    }
+                    >.dislikecnt{
+                        left: 20%;
+
+                    }
+                }
+
+            }
+        }
+
+
+
+    </style>
+    <div class="article_table">
+        <div>
+            <div class="title" th:text="${article.title}"></div>
+        </div>
+        <div>
+            <span class="writer" th:text="${article.userid.userid}"></span>
+            <span class="writedate" th:text="${article.writedate}"></span>
+        </div>
+        <div class="cntdiv">
+            <span class="viewcntlabel">조회수</span>
+            <span class="viewcnt" th:text="${article.views}"></span>
+        </div>
+        <hr style="margin-top: 20px; margin-bottom: 30px;" >
+
+        <div class="articlediv">
+            <div th:text="${article.articleimgsrc}"></div>
+            <div th:text="${article.article}"></div>
+        </div>
+    </div>
+
+
+    <div class="likedislike">
+        <div class="likediv">
+            <div class="likecnt" th:text="${article.likecount}" style="color: red" id="likecnt"></div>
+            <div class="likebtn"><a><button class="likecntbtn" style="height: 60px; width: 60px;" onclick="likeclicked();">좋아요</button></a></div>
+        </div>
+        <div class="dislikediv">
+            <div class="dislikebtn"><a><button class="dislikecntbtn" style="height: 60px; width: 60px;" onclick="dislikeclicked();">싫어요</button></a></div>
+            <div class="dislikecnt" th:text="${article.dislikecount}" style="color: blue" id="dislikecnt"></div>
+        </div>
+    </div>
+
+    <img th:src="@{C:/upload/}+${article.articleimgsrc}"></img>
+    <hr style="margin-top: 20px; margin-bottom: 30px;" >
+
+    <script th:inline="javascript">
+
+        const loginid = [[${session.loginid}]]
+        const articleid = [[${article.articleid}]]
+
+        const param = {
+            'loginid' : loginid,
+            'articleid' : articleid
+        };
+
+        function likeclicked(){
+            if (loginid == null){
+                window.alert("로그인해주세요~~")
+            }else{
+                fetch("/api/likecntplus", {
+                    method:"POST",
+                    body: JSON.stringify(param),
+                    headers:{
+                        'Content-Type' : 'application/json'
+                    },
+                })
+                    .then((res) => {
+                        res.text().then(function (result){
+                            if(result=='false'){
+                                window.alert("이미 좋아요한 게시물이에요~")
+                            }else{
+                                const likecnt = document.getElementById("likecnt");
+                                likecnt.innerText = result;
+                            }
+                        })
+                    })
+            }
+        }
+
+        function dislikeclicked(){
+            if (loginid == null){
+                window.alert("로그인해주세요~~")
+            }else{
+                fetch("/api/dislikecntplus", {
+                    method:"POST",
+                    body: JSON.stringify(param),
+                    headers:{
+                        'Content-Type' : 'application/json'
+                    },
+                })
+                    .then((res) => {
+                        res.text().then(function (result){
+                            if(result=='false'){
+                                window.alert("이미 싫어요한 게시물이에요~")
+                            }else{
+                                const dislikecnt = document.getElementById("dislikecnt");
+                                dislikecnt.innerText = result;
+                            }
+                        })
+                    })
+            }
+
+        }
+
+    </script>
+
+
+</div>
+
+
+
+
+
+</body>
+</html>

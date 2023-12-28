@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="headerFragment" id="headerFragment">
+<!-- 헤더에 필요한 기능들 -->
+<!--    로그인 버튼, 회원가입 버튼, 게시글 보러 가기 메뉴, 홈으로 이동 가능한 로고, 검색창-->
+    <style>
+        a{
+            text-decoration: none;
+            color: white;
+        }
+
+
+        #headerFragment{
+            position: relative;
+            height: 260px;
+            width: 1000px;
+            left: calc(50% - 500px);
+
+
+            >.header-top-container{
+                position: absolute;
+                width: 100%;
+                height: 150px;
+
+                >#tohomelogodiv{
+                    position: absolute;
+                    width: 300px;
+                    height: 150px;
+                    >a{
+                        position: absolute;
+                        bottom: 0;
+                        font-size: 80px;
+                        font-weight: 700;
+                        left: 30px;
+                        color: #3366CC;
+
+                    }
+                }
+                .searchbox{
+                    position: absolute;
+                    width: 400px;
+                    height: 150px;
+                    right: 0;
+
+                    >form{
+                        position: absolute;
+                        bottom: 0;
+                        width: 100%;
+                        height: 100%;
+                        >input{
+                            position: absolute;
+                            left: 0;
+                            bottom: 0;
+                            width: 280px;
+                            height: 60px;
+                            font-size: 25px;
+                        }
+                        >button{
+                            position: absolute;
+                            left: 290px;
+                            height: 64px;
+                            bottom: 1px;
+                            width: 80px;
+                            font-weight: 700;
+                            font-size: 25px;
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+            >.centerline{
+                position: absolute;
+                width: 100%;
+                height: 75px;
+                background-color: #3366CC;
+                top: 180px;
+                >a>.to_total_article_page{
+                    position: absolute;
+                    height: 100%;
+                    width: 15%;
+                    left: 5%;
+                    font-size: 20px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-weight: 700;
+                    color: white;
+                }
+
+            }
+        }
+
+
+
+    </style>
+
+
+    <div class="header-top-container">
+        <div id="tohomelogodiv">
+            <a href="/"><span>게시판</span></a>
+        </div>
+
+        <div class="searchbox">
+            <form action="/search" method="post">
+                <input type="text" name="search_keyword">
+                <button type="submit">검색</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="centerline">
+        <a th:href="@{/articles/{page}(page=1)}"><div class="to_total_article_page">게시글 전체보기</div></a>
+    </div>
+
+
+
+
+</div>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="bannerFragment" id="bannerFragment">
+    <style>
+        #bannerFragment{
+            position: relative;
+            width: 1000px;
+            height: 150px;
+            left: calc(50% - 500px);
+
+            > div {
+                position: absolute;
+                height: 100%;
+
+            }
+
+            > #main_banner{
+                background-color: lightgrey;
+                width: 70%;
+                left: 0;
+
+
+            }
+            >#logincheckdiv{
+                width: 30%;
+                right: 0;
+
+                > div {
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+
+                    >a>.login{
+                        width: 80%;
+                        height: 50%;
+                        position: absolute;
+                        top: 25%;
+                        left: 10%;
+                        font-size: 40px;
+                        font-weight: 600;
+                        border-radius: 20px;
+                        border: none;
+                        color: white;
+                        background-color: #3366CC;
+                        letter-spacing: 3px;
+                        }
+
+                        
+                    >.join{
+                        width: 80%;
+                        position: absolute;
+                        bottom: 2%;
+                        left: 10%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        font-size: 15px;
+
+                    }
+
+                }
+                .login_user_div{
+                    position: absolute;
+                    width: 100%;
+                    height: 60%;
+                    font-size: 35px;
+                    font-weight: 500;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                }
+                .logout{
+                    position: absolute;
+                    width: 50%;
+                    height: 40%;
+                    bottom: 0;
+                    border: solid 1px #3366CC;
+                    border-radius: 20px;
+                    color: #3366CC;
+                    font-size: 18px;
+                    font-weight: 600;
+                    letter-spacing: 2px;
+                    background-color: white;
+
+                }
+                .logout:hover{
+                    background-color: #3366CC;
+                    color: white;
+                }
+                .mypage{
+                    position: absolute;
+                    width: 50%;
+                    height: 40%;
+                    bottom: 0;
+                    border: none;
+                    border-radius: 20px;
+                    color: #3366CC;
+                    font-size: 18px;
+                    font-weight: 600;
+                    letter-spacing: 2px;
+                    background-color: white;
+                    right: 0;
+                    border: solid 1px #3366CC;
+                }
+                .mypage:hover{
+                    background-color: #3366CC;
+                    color: white;
+                }
+
+
+            }
+
+
+
+        }
+    </style>
+
+    <div id="main_banner">
+
+    </div>
+
+    <div id="logincheckdiv">
+        <div th:unless="${#strings.isEmpty(session.loginid)}" class="login">
+            <div class="login_user_div" th:text="${session.loginid}+님"></div>
+            <a href="/logout"><button class="logout">로그아웃</button></a>
+            <a href="/mypage"><button class="mypage">마이페이지</button></a>
+        </div>
+
+        <div th:if="${#strings.isEmpty(session.loginid)}" class="notlogin">
+            <a href="/login"><button class="login">로그인</button></a>
+            <a href="/join" class="join">회원가입 하러가기</a>
+        </div>
+    </div>
+
+
+</div>
+</body>
+</html>

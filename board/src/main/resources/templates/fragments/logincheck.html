@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="logincheckFragment" id="logincheckFragment">
+    <style>
+
+        #logincheckFragment{
+            background-color: lightsteelblue;
+            width: 300px;
+            height: 260px;
+            right: calc(50% - 500px);
+
+        }
+
+
+
+    </style>
+
+
+    <div class="logincheckdiv">
+        <div th:unless="${#strings.isEmpty(session.loginid)}" class="login">
+            <a href="/logout"><button>로그아웃</button></a>
+            <a href="/mypage"><button>마이페이지</button></a>
+        </div>
+
+        <div th:if="${#strings.isEmpty(session.loginid)}" class="notlogin">
+            <div>
+                <a href="/login"><button>로그인</button></a>
+                <a href="/join"><button>회원가입</button></a>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+</body>
+</html>

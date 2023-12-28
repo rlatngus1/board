@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<div th:fragment="articlewriteFragment" id="articlewriteFragment">
+  <div>
+    <form action="/write" method="post" enctype="multipart/form-data">
+      <div class="title_div">
+        <div class="title_label">제목</div>
+        <input type="text" name="title" class="title_input" placeholder="제목을 입력해주세요">
+      </div>
+
+
+      <hr>
+
+      <div class="article_div">
+        <div class="article_label">본문</div>
+        <input type="text" name="article" class="article_input" placeholder="본문을 입력해주세요">
+      </div>
+
+      <input type="file" name="file"/>
+
+      <div class="btn_div">
+        <button type="submit">작성</button>
+      </div>
+    </form>
+  </div>
+
+  <style>
+    #articlewriteFragment{
+      width: 1000px;
+      position: relative;
+      left: calc(50% - 500px);
+      >div{
+        position: relative;
+        >form{
+          position: relative;
+          width: 100%;
+
+          >div{
+            position: relative;
+            width: 100%;
+
+          }
+          >.title_div{
+            height: 100px;
+
+            >.title_label{
+              position: absolute;
+              width: 30%;
+              height: 100%;
+              font-size: 30px;
+              font-weight: 600;
+              letter-spacing: 10px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            }
+            >input{
+              position: absolute;
+              right: 2%;
+              width: 65%;
+              height: 80%;
+              font-size: 25px;
+              top: 7%;
+
+            }
+
+          }
+
+        }
+      }
+
+    }
+
+
+
+  </style>
+
+
+
+</div>
+
+
+<div th:fragment="articleeditFragment" id="articleeditFragment">
+  <div>
+    <form action="/article_edit_submit" method="post">
+      <input type="hidden" name="articleid" th:value="${article.articleid}">
+      <div>
+        <div>제목</div>
+        <input type="text" name="title" th:value="${article.title}">
+      </div>
+      <hr>
+      <div>
+        <div>본문</div>
+        <input type="text" name="article" th:value="${article.article}">
+      </div>
+
+      <div>
+        <button type="submit">편집</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+</body>
+</html>

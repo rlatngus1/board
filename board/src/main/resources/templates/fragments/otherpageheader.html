@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="headerFragment" id="headerFragment">
+    <div class="header_top_container">
+        <div id="tohomelogodiv">
+            <a href="/" style="text-decoration: none"><span class="board_logo">게시판</span></a>
+        </div>
+
+        <!--    로그인 체크-->
+        <div id="logincheckdiv">
+            <div th:if="${#strings.isEmpty(session.loginid)}" class="notlogin">
+                <a href="/login"><button class="login">로그인</button></a>
+                <a href="/join"><button class="join">회원가입</button></a>
+            </div>
+            <div th:unless="${#strings.isEmpty(session.loginid)}" class="login">
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="header_center_line">
+
+        <div class="searchbox">
+            <form action="/search" method="post">
+                <input type="text" name="search_keyword">
+                <button type="submit">검색</button>
+            </form>
+        </div>
+
+
+        <form action="#" id="ordertype">
+            <label for="ordertypeselect" id="orderlabel">정렬방식</label>
+            <select name="languages" id="ordertypeselect">
+                <option value="javascript">최신순</option>
+                <option value="javascript">오래된 게시물순</option>
+                <option value="php">좋아요 많은 순</option>
+                <option value="java">조회 많은 순</option>
+            </select>
+        </form>
+    </div>
+
+
+    <style>
+        .header_top_container{
+            position: relative;
+            width: 1000px;
+            height: 60px;
+            left: calc(50% - 500px);
+
+            >#tohomelogodiv{
+                position: absolute;
+                width: 20%;
+                height: 100%;
+                left: 2%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            #logincheckdiv{
+                position: absolute;
+                width: 50%;
+                height: 100%;
+                right: 5%;
+            }
+
+            .board_logo{
+                color: #3366CC;
+                font-size: 50px;
+                font-weight: 600;
+            }
+
+            .notlogin{
+                width: 100%;
+                height: 100%;
+                display: flex;
+                justify-content: right;
+                align-items: center;
+
+                & button {
+                    height: 50px;
+                    font-weight: 700;
+                    font-size: 25px;
+                    margin-left: 15px;
+                    border-radius: 10px;
+                    background-color: #3366CC;
+                    color: white;
+                    border: none;
+                    padding-left: 20px;
+                    padding-right: 20px;
+                }
+
+                & button:hover {
+                    color: #3366CC;
+                    background-color: white;
+
+                }
+            }
+            .login{
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+
+        .header_center_line{
+            position: relative;
+            width: 1000px;
+            margin-top: 10px;
+            background-color: #3366CC;
+            height: 60px;
+            left: calc(50% - 500px);
+
+            >.searchbox{
+               position: absolute;
+                height: 100%;
+                width: 40%;
+                left: 3%;
+
+                & input {
+                    position: absolute;
+                    width: 78%;
+                    height: 85%;
+                    border-radius: 10px;
+                    border: lightgrey 1px;
+                    box-shadow: 3px 3px 3px lightgrey inset;
+                    top: 3%;
+                    font-size: 20px;
+                }
+
+
+                & button {
+                    position: absolute;
+                    width: 18%;
+                    height: 85%;
+                    right: 0;
+                    top: 7%;
+                    font-size: 20px;
+                    font-weight: 600;
+                    border-radius: 10px;
+                    border: none;
+                    background-color: white;
+                    color: #3366CC;
+                    letter-spacing: 3px;
+                }
+
+                & button:hover{
+                    color: white;
+                    background-color: #3366CC;
+                }
+
+
+
+            }
+
+            >#ordertype{
+                position: absolute;
+                height: 100%;
+                width: 35%;
+                right: 3%;
+
+                >#ordertypeselect{
+                  position: absolute;
+                    height: 90%;
+                    width: 65%;
+                    right: 0;
+                    font-size: 20px;
+                    top: 5%;
+                }
+                >#orderlabel{
+                  position: absolute;
+                    height: 100%;
+                    font-size: 25px;
+                    color: white;
+                    font-weight: 600;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                }
+
+
+            }
+
+        }
+
+
+
+    </style>
+
+</div>
+</body>
+</html>

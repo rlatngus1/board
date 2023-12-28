@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="loginFragment" id="loginFragment">
+
+    <style>
+        #loginFragment{
+            position: relative;
+            width: 1000px;
+            left: calc(50% - 500px);
+            height: 60vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+        }
+
+        .login_div{
+            position: relative;
+            height: 500px;
+            width: 600px;
+            border: 4px solid #3366CC;
+
+        }
+
+        .to_board_main{
+            font-size: 55px;
+            height: 125px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #3366CC;
+            font-weight: 700;
+        }
+
+        .login_form{
+
+            position: relative;
+            height: calc(100% - 125px);
+            width: 100%;
+
+
+            >div{
+                position: relative;
+                height: 33%;
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                
+                >input{
+                    width: 90%;
+                    height: 80%;
+                    font-size: 35px;
+                }
+                >button{
+                    width: 90%;
+                    height: 80%;
+                    font-size: 40px;
+                    letter-spacing: 15px;
+                    background-color: #3366CC;
+                    color: white;
+                    font-weight: 700;
+                    border: none;
+                }
+                >button:hover{
+                    color: #3366CC;
+                    background-color: white;
+
+                }
+
+
+
+            }
+
+
+
+
+        }
+
+        
+
+
+
+
+    </style>
+<!--로그인 아이디 입력, 비밀번호 입력, 로그인 -->
+    <div class="login_div">
+        <form method="post" action="/logincheck" class="login_form">
+            <a href="/" class="to_board_main"><div>게시판</div></a>           
+            <div class="id_input_div"><input type="text" name="userid" placeholder="아이디를 입력하세요"></div>
+            <div class="pw_input_div"><input type="text" name="userpw" placeholder="비밀번호를 입력하세요"></div>
+            <div><button type="submit">로그인</button></div>
+        </form>
+    </div>
+</div>
+
+
+<div th:fragment="joinFragment" id="joinFragment">
+    <!--로그인 아이디 입력, 비밀번호 입력, 로그인 -->
+    <div>
+        <form method="post" action="/join_submit">
+            <div>
+                <div>id</div>
+                <div><input type="text" name="userid" placeholder="아이디를 입력하세요"></div>
+            </div>
+            <div>
+                <div>pw</div>
+                <div><input type="text" name="userpw" placeholder="비밀번호를 입력하세요"></div>
+            </div>
+            <div>
+                <div>pw 확인</div>
+                <div><input type="text" name="userpw_check" placeholder="비밀번호를 한번 더 입력해주세요"></div>
+            </div>
+            <button type="submit">회원가입</button>
+        </form>
+    </div>
+</div>
+
+
+
+
+</body>
+</html>

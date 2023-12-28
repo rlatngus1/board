@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="commentFragment" id="commentFragment">
+    <div class="comment_write_div">
+        <form th:action="@{/commentwrite/{id}(id=${article.articleid})}" method="post">
+        <div>
+            <div>작성자</div>
+            <div>
+                <input type="radio" name="writer" th:value="${session.loginid}" onclick="write_comment_with_login_id();" id="commentwriter_loginid">로그인 아이디
+                <input type="radio" name="writer" value="익명" style="margin-left: 20px" checked id="commentwriter_noname">익명
+            </div>
+        </div>
+        <div>
+            <div>
+                <input type="text" name="commenttxt" class="commenttxtinput">
+                <button type="submit" class="commentsubmitbtn">입력</button>
+            </div>
+        </div>
+        </form>
+    </div>
+
+    <div class="comment_list_table">
+        <div class="comment_header_div">
+            <div class="writer_header">작성자</div>
+            <div class="comment_header">댓글</div>
+        </div>
+        <div class="comment_data_div">
+            <div th:each="comment : ${comments}" class="each_comment_data_div">
+                <div onclick="writecommentcomment(this);" th:value="${comment.commentid}" class="each_comment_data">
+                    <div th:text="${comment.commentwriter}" class="writer_data"></div>
+                    <div th:text="${comment.commenttxt}" class="comment_data"></div>
+                </div>
+                <div th:id="'commentwritediv' + ${comment.commentid}" class="commentwritediv" tabindex="-1"></div>
+            </div>
+        </div>
+    </div>
+
+
+        <script th:inline="javascript">
+
+            console.log('로그인 아이디 : ',loginid);
+
+        function writecommentcomment(div){
+
+            var clicked_commentid = div.getAttribute("value");
+
+            const check_document = document.getElementById("writecommentcommentdiv");
+
+            if(check_document==null){
+
+                const writecommentcommentdiv = document.getElementById("commentwritediv"+clicked_commentid);
+
+                //대댓글 입력 div
+                const create_div = document.createElement("div");
+                create_div.setAttribute("id", "writecommentcommentdiv")
+                writecommentcommentdiv.appendChild(create_div);
+
+                //대댓글 입력 form
+                const created_form = document.createElement("form");
+                created_form.setAttribute("method", "POST");
+                created_form.setAttribute("action", "/write_commentcomment");
+                create_div.appendChild(created_form);
+
+                //작성자
+                const created_writer_label = document.createElement("div");
+                created_writer_label.setAttribute("id", "commentwriterlabel")
+                created_writer_label.innerText = "작성자";
+                created_form.appendChild(created_writer_label);
+
+                //작성자 선택 라디오버튼 div
+                const select_writer_div = document.createElement("div");
+                select_writer_div.setAttribute("id", "select_writer_div")
+                created_form.appendChild(select_writer_div);
+
+                //익명 라디오 버튼
+                const created_noname_radiobtn = document.createElement("input");
+                created_noname_radiobtn.setAttribute("type", "radio");
+                created_noname_radiobtn.setAttribute("name", "writer");
+                created_noname_radiobtn.setAttribute("value", "익명");
+                select_writer_div.appendChild(created_noname_radiobtn);
+
+                //익명-라벨
+                const created_noname_label = document.createElement("label");
+                created_noname_label.setAttribute("id", "commentnonamelabel")
+                created_noname_label.innerText = "익명";
+                select_writer_div.appendChild(created_noname_label);
+
+
+                //로그인 아이디 라디오 버튼
+                const created_loginid_radiobtn = document.createElement("input");
+                created_loginid_radiobtn.setAttribute("type", "radio");
+                created_loginid_radiobtn.setAttribute("name", "writer");
+                created_loginid_radiobtn.setAttribute("value", loginid);
+                select_writer_div.appendChild(created_loginid_radiobtn);
+
+                //로그인 아이디 라벨
+                const created_loginid_label = document.createElement("label");
+                created_loginid_label.setAttribute("id", "commentloginidlabel")
+                created_loginid_label.innerText = "로그인 아이디";
+                select_writer_div.appendChild(created_loginid_label);
+
+                //댓글 입력
+                const created_commenttxt_label = document.createElement("div");
+                created_commenttxt_label.setAttribute("id", "created_commenttxt_label")
+                created_commenttxt_label.innerText = "댓글 입력";
+                created_form.appendChild(created_commenttxt_label);
+
+                //댓글 textinput
+                const created_comment_write_input = document.createElement("input");
+                created_comment_write_input.setAttribute("type", "text");
+                created_comment_write_input.setAttribute("id", "created_comment_write_input");
+                created_comment_write_input.setAttribute("name", "commenttxt");
+                created_comment_write_input.setAttribute("placeholder", "댓글을 입력하세요")
+                created_form.appendChild(created_comment_write_input);
+
+                //댓글 작성 버튼
+                const created_submit_btn = document.createElement("button");
+                created_submit_btn.setAttribute("type", "submit");
+                created_submit_btn.innerText = "작성";
+                created_submit_btn.setAttribute("id", "comment_submit");
+                created_form.appendChild(created_submit_btn);
+
+                const created_like_count_btn = document.createElement("button");
+                created_like_count_btn.innerText = "좋아요"
+                created_like_count_btn.setAttribute("id", "like_count_btn");
+                create_div.appendChild(created_like_count_btn);
+
+                const created_dislike_count_btn = document.createElement("button");
+                created_dislike_count_btn.innerText = "싫어요"
+                created_dislike_count_btn.setAttribute("id", "dislike_count_btn");
+                create_div.appendChild(created_dislike_count_btn);
+
+
+            }else{
+                check_document.remove();
+
+                const writecommentcommentdiv = document.getElementById("commentwritediv" + clicked_commentid);
+
+                //대댓글 입력 div
+                const create_div = document.createElement("div");
+                create_div.setAttribute("id", "writecommentcommentdiv")
+                writecommentcommentdiv.appendChild(create_div);
+
+                //대댓글 입력 form
+                const created_form = document.createElement("form");
+                created_form.setAttribute("method", "POST");
+                created_form.setAttribute("action", "/write_commentcomment");
+                create_div.appendChild(created_form);
+
+                //작성자
+                const created_writer_label = document.createElement("div");
+                created_writer_label.setAttribute("id", "commentwriterlabel")
+                created_writer_label.innerText = "작성자";
+                created_form.appendChild(created_writer_label);
+
+                //작성자 선택 라디오버튼 div
+                const select_writer_div = document.createElement("div");
+                select_writer_div.setAttribute("id", "select_writer_div")
+                created_form.appendChild(select_writer_div);
+
+                //익명 라디오 버튼
+                const created_noname_radiobtn = document.createElement("input");
+                created_noname_radiobtn.setAttribute("type", "radio");
+                created_noname_radiobtn.setAttribute("name", "writer");
+                created_noname_radiobtn.setAttribute("value", "익명");
+                select_writer_div.appendChild(created_noname_radiobtn);
+
+                //익명-라벨
+                const created_noname_label = document.createElement("label");
+                created_noname_label.setAttribute("id", "commentnonamelabel")
+                created_noname_label.innerText = "익명";
+                select_writer_div.appendChild(created_noname_label);
+
+
+                //로그인 아이디 라디오 버튼
+                const created_loginid_radiobtn = document.createElement("input");
+                created_loginid_radiobtn.setAttribute("type", "radio");
+                created_loginid_radiobtn.setAttribute("name", "writer");
+                created_loginid_radiobtn.setAttribute("value", loginid);
+                select_writer_div.appendChild(created_loginid_radiobtn);
+
+                //로그인 아이디 라벨
+                const created_loginid_label = document.createElement("label");
+                created_loginid_label.setAttribute("id", "commentloginidlabel")
+                created_loginid_label.innerText = "로그인 아이디";
+                select_writer_div.appendChild(created_loginid_label);
+
+                //댓글 입력
+                const created_commenttxt_label = document.createElement("div");
+                created_commenttxt_label.setAttribute("id", "created_commenttxt_label")
+                created_commenttxt_label.innerText = "댓글 입력";
+                created_form.appendChild(created_commenttxt_label);
+
+                //댓글 textinput
+                const created_comment_write_input = document.createElement("input");
+                created_comment_write_input.setAttribute("type", "text");
+                created_comment_write_input.setAttribute("id", "created_comment_write_input");
+                created_comment_write_input.setAttribute("name", "commenttxt");
+                created_comment_write_input.setAttribute("placeholder", "댓글을 입력하세요")
+                created_form.appendChild(created_comment_write_input);
+
+                //댓글 작성 버튼
+                const created_submit_btn = document.createElement("button");
+                created_submit_btn.setAttribute("type", "submit");
+                created_submit_btn.innerText = "작성";
+                created_submit_btn.setAttribute("id", "comment_submit");
+                created_form.appendChild(created_submit_btn);
+
+                const created_like_count_btn = document.createElement("button");
+                created_like_count_btn.innerText = "좋아요"
+                created_like_count_btn.setAttribute("id", "like_count_btn");
+                create_div.appendChild(created_like_count_btn);
+
+                const created_dislike_count_btn = document.createElement("button");
+                created_dislike_count_btn.innerText = "싫어요"
+                created_dislike_count_btn.setAttribute("id", "dislike_count_btn");
+                create_div.appendChild(created_dislike_count_btn);
+
+
+            }
+
+
+        }
+
+
+    </script>
+
+    <style>
+
+        #commentFragment{
+            position: relative;
+            width: 1000px;
+            margin-top: 30px;
+            left: calc(50% - 500px);
+            >.comment_write_div{
+                position: relative;
+                width: 100%;
+                height: 150px;
+                border: dashed #3366CC 1px;
+                border-radius: 20px;
+                >form{
+                    position: relative;
+                    width: 100%;
+                    >div{
+                        width: 100%;
+                        position: relative;
+
+                        >div{
+                            position: relative;
+                            width: 100%;
+                            height: 25px;
+                            font-size: 20px;
+                            padding-left: 10px;
+                            padding-top: 10px;
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+            .commenttxtinput{
+                width: 85%;
+                height: 25px;
+            }
+            .commentsubmitbtn{
+                width: 12%;
+                height: 30px;
+                border: none;
+                border-radius: 10px;
+                letter-spacing: 10px;
+                font-size: 18px;
+                font-weight: 800;
+                background-color: #3366CC;
+                color: white;
+            }
+            .commentsubmitbtn:hover{
+                background-color: white;
+                color: #3366CC;
+            }
+
+            >.comment_list_table{
+
+                position: relative;
+                margin-top: 50px;
+
+                >.comment_header_div{
+                    position: relative;
+                    height: 60px;
+                    background-color: #F0FFFF;         
+          
+                    >.writer_header{
+                        width: 15%;
+                        position: absolute;
+                        left: 0;
+                        height: 100%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        font-size: 20px;
+                        font-weight: 500;
+                                       
+                    }
+                    >.comment_header{
+                        width: 85%;
+                        height: 100%;
+                        position: absolute;
+                        right: 0;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        font-size: 20px;
+                        font-weight: 500;
+                    }
+
+                }
+                >.comment_data_div{
+                    position: relative;
+                    width: 100%;
+
+                    >.each_comment_data_div{
+                        position: relative;
+                        width: 100%;
+                        >.each_comment_data{
+                            position: relative;
+                            display: table;
+                            width: 100%;
+                            border-bottom: lightblue 1px solid;
+                            border-top: lightblue 1px solid;
+                            font-size: 15px;
+                            font-weight: 500;
+
+                            >.writer_data{
+                            display: table-cell;
+                             width: 15%;
+
+                            }
+                            >.comment_data{
+                                display: table-cell;
+                                width: 85%;
+                                padding: 2em;
+
+                            }
+
+
+                        }
+                       
+ 
+
+                    }
+
+                }
+
+
+            }
+
+        }
+
+
+
+
+        #writecommentcommentdiv{
+            position: relative;
+            width: 100%;
+            height: 150px;
+            border: dashed #3366CC 1px;
+            border-radius: 20px;
+            >form{
+                position: relative;
+                width: 90%;
+                margin: 1%;
+                >div{
+                    width: 90%;
+                    position: relative;
+                    left: 2%;
+                }
+                >#created_comment_write_input{
+                    position: relative;
+                    left: 2%;
+                    width: 90%;
+                    height: 25px;
+
+                }
+                >#comment_submit{
+                    position: relative;
+                
+                    width: 8%;
+                    height: 30px;
+                    border: none;
+                    border-radius: 10px;
+                    background-color: #3366CC;
+                    color: white;
+
+                }
+
+        }
+
+            #like_count_btn{
+                position: relative;
+                left: 5%;
+                width: 45%;
+                height: 30px;
+                border: none;
+                border-radius: 10px;
+                background-color: #FA8072;
+                color: white;
+                font-size: 15px;
+
+            }
+            #dislike_count_btn{
+                position: relative;
+                left: 2%;
+                width: 45%;
+                height: 30px;
+                border: none;
+                border-radius: 10px;
+                background-color: #1E90FF;
+                color: white;
+                font-size: 15px;
+
+            }
+
+    }
+
+
+
+/* 
+        .comment_list_table{
+            position: relative;
+            margin-top: 30px;
+            >.comment_header_div{
+                position: relative;
+                height: 55px;
+                width: 100%;
+                background-color: #EFF5FB;
+
+                >div{
+                    position: absolute;
+                    height: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 20px;
+                    font-weight: 600;
+                    letter-spacing: 5px;
+                }
+                >.writer_header{
+                    position: absolute;
+                    height: 100%;
+                    left: 0;
+
+                    width: 20%;
+                }
+                .comment_header{
+                    position: absolute;
+                    height: 100%;
+                    right: 0;
+                    width: 80%;
+
+                }
+            }
+            >.comment_data_div{
+                position: relative;
+                width: 100%;
+                background-color: pink;
+                >.each_comment_data_div{
+                    position: relative;
+                    width: 100%;
+                    >.each_comment_data{
+                        position: relative;
+                        width: 100%;
+                        background-color: lightgrey;
+                        overflow: auto;
+                        display: table;
+  
+                        .writer_data{
+                            width: 200px;
+                            left: 0;
+                            background-color: pink;            
+                            display: table-cell;
+                        }
+                        .comment_data{
+                            width: 790px;
+                            background-color: rgb(201, 201, 76);
+                            display: table-cell;
+                        }
+
+
+                    }
+                }
+
+            }
+
+
+        } */
+
+
+
+
+
+    </style>
+
+</div>
+
+
+
+</body>
+</html>
