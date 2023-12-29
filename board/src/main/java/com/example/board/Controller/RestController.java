@@ -1,4 +1,5 @@
 package com.example.board.Controller;
+import com.example.board.Service.AccountService;
 import com.example.board.Service.ArticleService;
 import com.example.board.Service.UserDislikeService;
 import com.example.board.Service.UserlikeService;
@@ -15,12 +16,14 @@ public class RestController {
     private final ArticleService articleService;
     private final UserDislikeService userDislikeService;
 
-    public RestController(UserlikeService userlikeService, ArticleService articleService, UserDislikeService userDislikeService) {
+    private final AccountService accountService;
+
+    public RestController(UserlikeService userlikeService, ArticleService articleService, UserDislikeService userDislikeService, AccountService accountService) {
         this.userlikeService = userlikeService;
         this.articleService = articleService;
         this.userDislikeService = userDislikeService;
+        this.accountService = accountService;
     }
-
 
 
     @PostMapping("/likecntplus")
@@ -59,6 +62,20 @@ public class RestController {
         }else{
             return "false";
         }
+
+    }
+
+    @PostMapping("/duplication_check")
+    @ResponseBody
+    public boolean duplication_check(@RequestBody String data){
+
+        System.out.println(data);
+
+        if(accountService.logincheck(data).isPresent()){
+            return false;
+        }
+
+        return true;
 
     }
 

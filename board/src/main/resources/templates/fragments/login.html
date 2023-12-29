@@ -102,24 +102,187 @@
 
 
 <div th:fragment="joinFragment" id="joinFragment">
-    <!--로그인 아이디 입력, 비밀번호 입력, 로그인 -->
-    <div>
-        <form method="post" action="/join_submit">
+
+    <style>
+        #joinFragment{
+            position: relative;
+            width: 1000px;
+            left: calc(50% - 500px);
+            height: 60vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+
+            >#join_div{
+                position: relative;
+                width: 50%;
+                height: 50%;
+                border: #3366CC solid 4px;
+
+
+                >form{
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+
+                    >div{
+                        margin-top: 5%;
+                        >div{
+                            width: 90%;
+                            left: 5%;
+                            position: relative;
+                            font-size: 25px;
+                            input{
+                                margin-top: 3px;
+                                width: 95%;
+                                height: 50px;
+                                font-size: 25px;
+                            }
+                            #duplication_check_btn{
+                                position: absolute;
+                                right: 3%;
+                                top: 6%;
+                                height: 95%;
+                                width: 25%;
+                                font-size: 20px;
+                                font-weight: 600;
+                                border-radius: 10px;
+                                border: none;
+                                background-color: #3366CC;
+                                color: white;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                letter-spacing: 2px;
+                            }
+                            #duplication_check_btn:hover{
+                                color: #3366CC;
+                                background-color: white;
+                            }
+
+                        }
+                    }
+
+                    #join_btn{
+                        width: 90%;
+                        height: 20%;
+                        margin-top: 5%;
+                        margin-left: 5%;
+                        border: none;
+                        background-color: #3366CC;
+                        color: white;
+                        font-size: 45px;
+                        letter-spacing: 3px;
+                        font-weight: 600;
+                        border-radius: 20px;
+
+                    }
+                    #join_btn:hover{
+                        color: #3366CC;
+                        background-color: white;
+
+                    }
+
+
+
+                }
+            }
+
+        }
+
+
+        #id_duplication_check_result{
+            position: absolute;
+            width: 85%;
+            height: 10%;
+            right: 0;
+            top: 15%;
+
+        }
+
+        #pw_check_result{
+            position: absolute;
+            width: 75%;
+            height: 7%;
+            right: 0;
+        }
+
+
+
+    </style>
+    <div id="join_div">
+        <form method="post" action="/join_submit" id="join_form">
             <div>
                 <div>id</div>
-                <div><input type="text" name="userid" placeholder="아이디를 입력하세요"></div>
+                <div><input type="text" name="userid" placeholder="아이디를 입력하세요" id="join_new_id">
+                <div id="duplication_check_btn" onclick="duplication_check()">중복검사</div>
+                </div>
             </div>
+            <div id="id_duplication_check_result"></div>
             <div>
                 <div>pw</div>
-                <div><input type="text" name="userpw" placeholder="비밀번호를 입력하세요"></div>
+                <div><input type="text" name="userpw" placeholder="비밀번호를 입력하세요" id="orgin_pw"></div>
             </div>
+            <div id="pw_check_result"></div>
             <div>
                 <div>pw 확인</div>
-                <div><input type="text" name="userpw_check" placeholder="비밀번호를 한번 더 입력해주세요"></div>
+                <div><input type="text" name="userpw_check" placeholder="비밀번호를 한번 더 입력해주세요" onchange="pw_check();" id="check_pw"></div>
             </div>
-            <button type="submit">회원가입</button>
+            <button type="submit" id="join_btn" onclick="join_btn_clicked();">회원가입</button>
         </form>
     </div>
+
+    <script>
+        function duplication_check(){
+
+            const join_new_id = document.getElementById("join_new_id").value;
+            const id_duplication_check_result = document.getElementById("id_duplication_check_result");
+
+            if(join_new_id==''){
+                window.alert("아이디를 입력해주세요~")
+            }
+
+            async function postData(url = "", data = "") {
+                return await fetch(url, {
+                    method: "POST",
+                    body: data,
+                });
+            }
+
+            postData("/api/duplication_check", join_new_id)
+                .then((result) => result.json())
+                .then(json => {
+                    if(json){
+                        id_duplication_check_result.innerText = "사용가능한 아이디입니다.";
+
+                    }else{
+                        id_duplication_check_result.innerText = "중복된 아이디입니다~~";
+                    }
+
+                    }
+
+
+                );
+
+
+        }
+
+        function pw_check(){
+            const orgin_pw = document.getElementById("orgin_pw").value;
+            const check_pw = document.getElementById("check_pw").value;
+            const pw_check_result = document.getElementById("pw_check_result");
+
+            if(orgin_pw!=check_pw){
+                pw_check_result.innerText = "비밀번호가 같지 않습니다~";
+            }else {
+
+            }
+
+        }
+
+    </script>
+
 </div>
 
 

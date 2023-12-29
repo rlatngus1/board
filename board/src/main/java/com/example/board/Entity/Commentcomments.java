@@ -16,6 +16,10 @@ public class Commentcomments {
     private long commentcommentid;
 
     @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "articleid", referencedColumnName = "articleid")
+    private Articles articleid;
+
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "originalcommentid", referencedColumnName = "commentid")
     private Articlecomments commentid;
 

@@ -40,4 +40,10 @@ public interface ArticleRepository extends JpaRepository<Articles, Long> {
 
     long count();
 
+    @Query(value = "select * from articles where exists (select * from userlike where articles.articleid=userlike.articleid and userlike.userid=:userid)", nativeQuery = true)
+    List<Articles> find_user_liked_articles(@Param("userid")String userid);
+
+    @Query(value = "select * from articles where exists (select * from userdislike where articles.articleid=userdislike.articleid and userdislike.userid=:userid)", nativeQuery = true)
+    List<Articles> find_user_dislike_articles(@Param("userid")String userid);
+
 }

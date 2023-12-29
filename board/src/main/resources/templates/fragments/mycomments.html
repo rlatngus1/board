@@ -8,7 +8,20 @@
 
 <body>
     <div th:fragment="mycommentsFragment" id="mycommentsFragment">
+        <style>
+            #mycommentsFragment{
+                position: relative;
+                width: 1000px;
+                background-color: #E0ECF8;
+                margin-top: 50px;
+                left: calc(50% - 500px);
+            }
+
+
+        </style>
+
         
+    <div th:text="${comments}"></div>
 
 
 

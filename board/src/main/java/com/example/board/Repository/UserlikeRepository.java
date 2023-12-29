@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface UserlikeRepository extends JpaRepository <Userlike, Long> {
 
      @Query(value = "SELECT COUNT(*) from userlike where articleid =:articleid and userid = :userid", nativeQuery = true)
@@ -14,7 +16,7 @@ public interface UserlikeRepository extends JpaRepository <Userlike, Long> {
 
     @Modifying
     @Transactional
-     @Query(value = "INSERT INTO userlike (articleid, userid) VALUES (:articleid, :userid)", nativeQuery = true)
+    @Query(value = "INSERT INTO userlike (articleid, userid) VALUES (:articleid, :userid)", nativeQuery = true)
     void newlikecnt(@Param("articleid")long articleid, @Param("userid")String userid);
 
 

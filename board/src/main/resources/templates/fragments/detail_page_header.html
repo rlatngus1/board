@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -34,16 +34,11 @@
             </form>
         </div>
 
+        <div class="prev_next_div">
+            <button onclick="prevbtn();">이전 글</button>
+            <button onclick="nextbtn();">다음 글</button>
+        </div>
 
-        <form action="#" id="ordertype">
-            <label for="ordertypeselect" id="orderlabel">정렬방식</label>
-            <select name="languages" id="ordertypeselect">
-                <option value="javascript">최신순</option>
-                <option value="javascript">오래된 게시물순</option>
-                <option value="php">좋아요 많은 순</option>
-                <option value="java">조회 많은 순</option>
-            </select>
-        </form>
     </div>
 
 
@@ -119,7 +114,7 @@
             left: calc(50% - 500px);
 
             >.searchbox{
-               position: absolute;
+                position: absolute;
                 height: 100%;
                 width: 40%;
                 left: 3%;
@@ -159,35 +154,38 @@
 
 
             }
-
-            >#ordertype{
-                position: absolute;
+            >.prev_next_div{
+                position: relative;
+                left: 60%;
+                width: 30%;
                 height: 100%;
-                width: 35%;
-                right: 3%;
-
-                >#ordertypeselect{
-                  position: absolute;
-                    height: 90%;
-                    width: 65%;
-                    right: 0;
-                    font-size: 20px;
-                    top: 5%;
-                }
-                >#orderlabel{
-                  position: absolute;
-                    height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                button{
+                    width: 40%;
+                    position: relative;
+                    height: 80%;
                     font-size: 25px;
-                    color: white;
                     font-weight: 600;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
+                    color: #3366CC;
+                    background-color: white;
+                    border-radius: 10px;
+                    border: none;
+                    margin-left: 15px;
+                }
+                button:hover{
+                    background-color: #3366CC;
+                    color: white;
+
+                }
 
                 }
 
 
             }
+
+
 
         }
 
@@ -195,6 +193,26 @@
 
     </style>
 
+    <script th:inline="javascript">
+
+    const articleid = [[${article.articleid}]];
+
+    function prevbtn(){
+        const prev = articleid-1;
+        location.href = "/detail/"+prev;
+    }
+
+    function nextbtn(){
+        const next = articleid+1;
+        location.href = "/detail/"+next;
+    }
+
+    </script>
+
 </div>
+
+
+
+
 </body>
 </html>

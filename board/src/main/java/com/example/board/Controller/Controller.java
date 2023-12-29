@@ -3,6 +3,8 @@ import com.example.board.Entity.Account;
 import com.example.board.Service.AccountService;
 import com.example.board.Service.ArticleService;
 import com.example.board.Service.ArticlecommentsService;
+import com.example.board.Service.CommentcommentService;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
@@ -26,13 +28,13 @@ public class Controller {
     private final ArticleService articleService;
     private final ArticlecommentsService articlecommentsService;
 
+    private final CommentcommentService commentcommentService;
 
-
-    public Controller(AccountService accountService, ArticleService articleService, ArticlecommentsService articlecommentsService) {
+    public Controller(AccountService accountService, ArticleService articleService, ArticlecommentsService articlecommentsService, CommentcommentService commentcommentService) {
         this.accountService = accountService;
         this.articleService = articleService;
         this.articlecommentsService = articlecommentsService;
-
+        this.commentcommentService = commentcommentService;
     }
 
     @RequestMapping("/")     //메인화면
@@ -94,6 +96,8 @@ public class Controller {
 
         String userid = request.getParameter("userid");
         String userpw = request.getParameter("userpw");
+
+        System.out.println(userid);
 
         accountService.joinmember(userid, userpw);
         return "/layouts/welcome";
@@ -167,9 +171,8 @@ public class Controller {
 
 
         model.addAttribute("article", articleService.update_views(id));
-
         model.addAttribute("comments", articlecommentsService.findcommentsbyarticleid(id));
-
+        model.addAttribute("replies", commentcommentService.findbyarticleid(id));
 
         return "/layouts/detail";
     }
@@ -261,13 +264,10 @@ public class Controller {
         return "/layouts/articles";
     }
 
-    @RequestMapping("/mycomments")
+    @GetMapping("/mycomments")
     public String mycomments(HttpSession session, Model model){ 
 
         String loginid = session.getAttribute("loginid").toString();
-        System.out.println(loginid);
-
-        System.out.println(articlecommentsService.findByCommentwriter(loginid));
         model.addAttribute("comments", articlecommentsService.findByCommentwriter(loginid));
 
         return "/layouts/mycomments";
@@ -276,23 +276,50 @@ public class Controller {
     @RequestMapping("/fileupload")
     public String fileupload() {
 
-
         return "/layouts/fileupload";
     }
 
     @PostMapping("/write_commentcomment")
     public String write_commentcomment(HttpServletRequest request){
 
-        String referer = request.getHeader("Referer").toString();
         String comment_writer = request.getParameter("writer");
         String commenttxt = request.getParameter("commenttxt");
-        System.out.println("대댓글 입력 시도");
-        System.out.println(comment_writer+commenttxt);
-        System.out.println(referer);
+        String commentid_str = request.getParameter("commentid");
+        String article_id_str = request.getParameter("articleid");
 
-        return "redirect:/";
+        long originalcommentid = Long.parseLong(commentid_str);
+        long articleid = Long.parseLong(article_id_str);
+
+        commentcommentService.write_commentcomment(comment_writer, commenttxt, originalcommentid, articleid);
+
+        return "redirect:/detail/"+article_id_str;
     }
-    
 
+
+    @GetMapping("/mylike")
+    public String mylike(Model model, HttpSession session){
+
+        String loginid = session.getAttribute("loginid").toString();
+
+        model.addAttribute("articles", articleService.find_user_liked_articles(loginid));
+
+        return "/layouts/mylike";
+    }
+
+
+    @GetMapping("/mydislike")
+    public String mydislike(Model model, HttpSession session){
+
+        String loginid = session.getAttribute("loginid").toString();
+
+        model.addAttribute("articles", articleService.find_user_dislike_articles(loginid));
+
+        return "/layouts/mylike";
+    }
+
+    @GetMapping("/changepw")
+    public String changepw(){
+        return "";
+    }
 
 }

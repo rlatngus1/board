@@ -35,19 +35,25 @@
                     <div th:text="${comment.commentwriter}" class="writer_data"></div>
                     <div th:text="${comment.commenttxt}" class="comment_data"></div>
                 </div>
+                <div th:each="reply : ${replies}" class="replies_div">
+                    <div th:if="${reply.commentid.commentid == comment.commentid}" class="replies">
+                        <div th:text="${reply.commentcommentwriter}" class="reply_writer"></div>
+                        <div th:text="${reply.commentcommenttxt}" class="reply_txt"></div>
+                    </div>
+                </div>
                 <div th:id="'commentwritediv' + ${comment.commentid}" class="commentwritediv" tabindex="-1"></div>
             </div>
         </div>
     </div>
 
-
-        <script th:inline="javascript">
+    <script th:inline="javascript">
 
             console.log('로그인 아이디 : ',loginid);
 
         function writecommentcomment(div){
 
             var clicked_commentid = div.getAttribute("value");
+            console.log(clicked_commentid);
 
             const check_document = document.getElementById("writecommentcommentdiv");
 
@@ -66,6 +72,20 @@
                 created_form.setAttribute("action", "/write_commentcomment");
                 create_div.appendChild(created_form);
 
+                //게시물 아이디
+                const created_articleid_input = document.createElement("input");
+                created_articleid_input.setAttribute("type", "hidden");
+                created_articleid_input.setAttribute("name", "articleid");
+                created_articleid_input.setAttribute("value", articleid);
+                created_form.appendChild(created_articleid_input);
+
+                //코멘트 아이디
+                const created_comment_id_input = document.createElement("input");
+                created_comment_id_input.setAttribute("type", "hidden");
+                created_comment_id_input.setAttribute("name", "commentid");
+                created_comment_id_input.setAttribute("value", clicked_commentid);
+                created_form.appendChild(created_comment_id_input);
+                
                 //작성자
                 const created_writer_label = document.createElement("div");
                 created_writer_label.setAttribute("id", "commentwriterlabel")
@@ -139,7 +159,7 @@
             }else{
                 check_document.remove();
 
-                const writecommentcommentdiv = document.getElementById("commentwritediv" + clicked_commentid);
+                           const writecommentcommentdiv = document.getElementById("commentwritediv" + clicked_commentid);
 
                 //대댓글 입력 div
                 const create_div = document.createElement("div");
@@ -151,6 +171,12 @@
                 created_form.setAttribute("method", "POST");
                 created_form.setAttribute("action", "/write_commentcomment");
                 create_div.appendChild(created_form);
+
+                //코멘트 아이디
+                const created_comment_id_input = document.createElement("input");
+                created_comment_id_input.setAttribute("type", "hidden");
+                created_comment_id_input.setAttribute("name", "commentid");
+                created_comment_id_input.setAttribute("value", clicked_commentid);
 
                 //작성자
                 const created_writer_label = document.createElement("div");
@@ -221,10 +247,19 @@
                 created_dislike_count_btn.setAttribute("id", "dislike_count_btn");
                 create_div.appendChild(created_dislike_count_btn);
 
-
             }
 
 
+        }
+
+        function write_comment_with_login_id(){
+            console.log(loginid);
+            if(loginid==null){
+                var result = confirm("로그인 하시겠습니까???");
+                if(result){
+                    location.href="/login";
+                }
+            }
         }
 
 
@@ -333,7 +368,6 @@
                             display: table;
                             width: 100%;
                             border-bottom: lightblue 1px solid;
-                            border-top: lightblue 1px solid;
                             font-size: 15px;
                             font-weight: 500;
 
@@ -429,80 +463,36 @@
 
     }
 
-
-
-/* 
-        .comment_list_table{
+        .replies_div{
             position: relative;
-            margin-top: 30px;
-            >.comment_header_div{
+            width: 90%;
+            left: 10%;
+            >.replies{
                 position: relative;
-                height: 55px;
                 width: 100%;
-                background-color: #EFF5FB;
-
+                height: 50px;
                 >div{
-                    position: absolute;
                     height: 100%;
                     display: flex;
-                    justify-content: center;
                     align-items: center;
-                    font-size: 20px;
-                    font-weight: 600;
-                    letter-spacing: 5px;
+                    font-size: 15px;
+                    border-bottom: #E0F2F7 1px solid;
                 }
-                >.writer_header{
+                >.reply_writer{
                     position: absolute;
-                    height: 100%;
-                    left: 0;
 
-                    width: 20%;
+                    width: 15%;
+                    justify-content: center;
                 }
-                .comment_header{
+                >.reply_txt{
                     position: absolute;
-                    height: 100%;
                     right: 0;
-                    width: 80%;
+                    width: 85%;
 
                 }
             }
-            >.comment_data_div{
-                position: relative;
-                width: 100%;
-                background-color: pink;
-                >.each_comment_data_div{
-                    position: relative;
-                    width: 100%;
-                    >.each_comment_data{
-                        position: relative;
-                        width: 100%;
-                        background-color: lightgrey;
-                        overflow: auto;
-                        display: table;
-  
-                        .writer_data{
-                            width: 200px;
-                            left: 0;
-                            background-color: pink;            
-                            display: table-cell;
-                        }
-                        .comment_data{
-                            width: 790px;
-                            background-color: rgb(201, 201, 76);
-                            display: table-cell;
-                        }
 
-
-                    }
-                }
-
-            }
-
-
-        } */
-
-
-
+        }
 
 
     </style>

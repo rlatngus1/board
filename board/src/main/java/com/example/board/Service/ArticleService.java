@@ -2,11 +2,14 @@ package com.example.board.Service;
 
 import com.example.board.Entity.Articles;
 import com.example.board.Repository.ArticleRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -103,4 +106,13 @@ public class ArticleService {
     }
 
 
+    public List<Articles> find_user_liked_articles(String userid){
+
+        return repository.find_user_liked_articles(userid);
+    }
+
+    public List<Articles> find_user_dislike_articles(String userid){
+
+        return repository.find_user_dislike_articles(userid);
+    }
 }
