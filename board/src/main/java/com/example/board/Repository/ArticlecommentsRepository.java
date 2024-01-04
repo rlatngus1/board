@@ -13,7 +13,7 @@ public interface ArticlecommentsRepository extends JpaRepository<Articlecomments
 
     @Modifying
     @Transactional
-    @Query(value = "insert into Articlecomments (articleid, commentwriter, commenttxt) VALUES(:articleid, :commentwriter, :commenttxt)", nativeQuery = true)
+    @Query(value = "insert into articlecomments (articleid, commentwriter, commenttxt) VALUES(:articleid, :commentwriter, :commenttxt)", nativeQuery = true)
     void commentwrite(@Param("articleid")long articleid, @Param("commentwriter")String commentwriter, @Param("commenttxt")String commenttxt);
 
 

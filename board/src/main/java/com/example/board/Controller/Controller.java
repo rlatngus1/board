@@ -44,14 +44,14 @@ public class Controller {
         Pageable pageable = PageRequest.of(0, 20);
         model.addAttribute("articles", articleService.orderbywritedate(pageable));
 
-        return "/layouts/main";
+        return "layouts/main";
     }
 
     @RequestMapping("/login")   //로그인 화면
     public String loginpage(HttpServletRequest request){
         String prevuri = request.getHeader("Referer");
         request.getSession().setAttribute("prevpage", prevuri);
-        return "/layouts/login";
+        return "layouts/login";
     }
 
     @PostMapping("/logincheck") //아이디 패스워드 값 전달받고 확인합니다
@@ -88,7 +88,7 @@ public class Controller {
 
     @RequestMapping("/join")    //회원가입 화면
     public String joinpage(){
-        return "/layouts/join";
+        return "layouts/join";
     }
 
     @PostMapping("/join_submit")    //회원가입!!
@@ -100,7 +100,7 @@ public class Controller {
         System.out.println(userid);
 
         accountService.joinmember(userid, userpw);
-        return "/layouts/welcome";
+        return "layouts/welcome";
     }
 
 
@@ -110,7 +110,7 @@ public class Controller {
         String prevuri = request.getHeader("Referer");
         request.getSession().setAttribute("prevpage", prevuri);
 
-        return "/layouts/write";
+        return "layouts/write";
     }
 
     @PostMapping("/write")
@@ -153,8 +153,12 @@ public class Controller {
 
 
     @PostMapping("/search")         //검색 결과 화면으로!!
-    public String search_result_page(HttpServletRequest request){
-        return "/layouts/search_result";
+    public String search_result_page(HttpServletRequest request, Model model){
+
+        String keyword = request.getParameter("search_keyword");
+        model.addAttribute("articles", articleService.search_articles(keyword));
+
+        return "layouts/search_result";
     }
 
     @RequestMapping("/logout")
@@ -174,7 +178,7 @@ public class Controller {
         model.addAttribute("comments", articlecommentsService.findcommentsbyarticleid(id));
         model.addAttribute("replies", commentcommentService.findbyarticleid(id));
 
-        return "/layouts/detail";
+        return "layouts/detail";
     }
 
     @PostMapping("/commentwrite/{id}")
@@ -192,7 +196,7 @@ public class Controller {
     @RequestMapping("/mypage")
     public String mypage(){
 
-        return "/layouts/mypage";
+        return "layouts/mypage";
     }
 
     @RequestMapping("/myarticles")
@@ -201,7 +205,7 @@ public class Controller {
         String userid = session.getAttribute("loginid").toString();
         model.addAttribute("articles", articleService.findByUserid_Userid(userid));
 
-        return "/layouts/myarticles";
+        return "layouts/myarticles";
 
     }
 
@@ -210,7 +214,7 @@ public class Controller {
 
         model.addAttribute("article", articleService.findByArticleId(id).get());
 
-        return "/layouts/edit_article";
+        return "layouts/edit_article";
     }
 
     @PostMapping("/article_edit_submit")
@@ -261,7 +265,7 @@ public class Controller {
         model.addAttribute("page", pagecnt);
         model.addAttribute("articles", articleService.orderbywritedate(pageable));
 
-        return "/layouts/articles";
+        return "layouts/articles";
     }
 
     @GetMapping("/mycomments")
@@ -270,13 +274,13 @@ public class Controller {
         String loginid = session.getAttribute("loginid").toString();
         model.addAttribute("comments", articlecommentsService.findByCommentwriter(loginid));
 
-        return "/layouts/mycomments";
+        return "layouts/mycomments";
     }
 
     @RequestMapping("/fileupload")
     public String fileupload() {
 
-        return "/layouts/fileupload";
+        return "layouts/fileupload";
     }
 
     @PostMapping("/write_commentcomment")
@@ -303,7 +307,7 @@ public class Controller {
 
         model.addAttribute("articles", articleService.find_user_liked_articles(loginid));
 
-        return "/layouts/mylike";
+        return "layouts/mylike";
     }
 
 
@@ -314,7 +318,7 @@ public class Controller {
 
         model.addAttribute("articles", articleService.find_user_dislike_articles(loginid));
 
-        return "/layouts/mylike";
+        return "layouts/mylike";
     }
 
     @GetMapping("/changepw")

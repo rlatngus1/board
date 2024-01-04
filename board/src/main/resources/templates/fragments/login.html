@@ -164,27 +164,26 @@
                         }
                     }
 
-                    #join_btn{
-                        width: 90%;
-                        height: 20%;
-                        margin-top: 5%;
-                        margin-left: 5%;
-                        border: none;
-                        background-color: #3366CC;
-                        color: white;
-                        font-size: 45px;
-                        letter-spacing: 3px;
-                        font-weight: 600;
-                        border-radius: 20px;
+                }
 
-                    }
-                    #join_btn:hover{
-                        color: #3366CC;
-                        background-color: white;
+                #join_btn{
+                    width: 90%;
+                    height: 20%;
+                    border: none;
+                    background-color: #3366CC;
+                    color: white;
+                    font-size: 45px;
+                    letter-spacing: 3px;
+                    font-weight: 600;
+                    border-radius: 20px;
+                    position: absolute;
+                    bottom: 3%;
+                    left: 5%;
 
-                    }
-
-
+                }
+                #join_btn:hover{
+                    color: #3366CC;
+                    background-color: white;
 
                 }
             }
@@ -229,8 +228,9 @@
                 <div>pw 확인</div>
                 <div><input type="text" name="userpw_check" placeholder="비밀번호를 한번 더 입력해주세요" onchange="pw_check();" id="check_pw"></div>
             </div>
-            <button type="submit" id="join_btn" onclick="join_btn_clicked();">회원가입</button>
         </form>
+        <button id="join_btn" onclick="join_btn_clicked();">회원가입</button>
+
     </div>
 
     <script>
@@ -274,9 +274,28 @@
             const pw_check_result = document.getElementById("pw_check_result");
 
             if(orgin_pw!=check_pw){
-                pw_check_result.innerText = "비밀번호가 같지 않습니다~";
+                pw_check_result.innerText = "비밀번호가 일치하지 않습니다~";
             }else {
+                pw_check_result.innerText = "올바른 비밀번호가 입력되었습니다~"
+            }
 
+        }
+
+
+        function join_btn_clicked(){
+            const id_duplication_result = document.getElementById('id_duplication_check_result').innerText;
+            const pw_check_result = document.getElementById("pw_check_result").innerText;
+
+            if(id_duplication_result==''){
+                window.alert("아이디 중복검사를 해주세요~~")
+            }else if(pw_check_result!='올바른 비밀번호가 입력되었습니다~'){
+                window.alert("비밀번호를 확인해주세요~~")
+            }else if(id_duplication_result=='중복된 아이디입니다~~'){
+                window.alert("중복된 아이디입니다~")
+            }else{
+                const join_btn = document.getElementById("join_btn");
+                join_btn.setAttribute("form", "join_form");
+                join_btn.submit();
             }
 
         }

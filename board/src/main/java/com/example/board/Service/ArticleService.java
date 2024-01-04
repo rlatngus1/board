@@ -115,4 +115,9 @@ public class ArticleService {
 
         return repository.find_user_dislike_articles(userid);
     }
+
+    public List<Articles> search_articles(String keyword){
+
+        return repository.search_articles(keyword);
+    }
 }

@@ -46,4 +46,8 @@ public interface ArticleRepository extends JpaRepository<Articles, Long> {
     @Query(value = "select * from articles where exists (select * from userdislike where articles.articleid=userdislike.articleid and userdislike.userid=:userid)", nativeQuery = true)
     List<Articles> find_user_dislike_articles(@Param("userid")String userid);
 
+    @Query(value = "select * from articles where title like %:keyword% or article like %:keyword%", nativeQuery = true)
+    List<Articles> search_articles(@Param("keyword")String keyword);
+
+
 }

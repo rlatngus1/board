@@ -14,7 +14,7 @@ public interface CommentCommentRepository extends JpaRepository <Commentcomments
 
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO Commentcomments (commentcommentwriter, commentcommenttxt, originalcommentid, articleid) VALUES (:commentcommentwriter, :commentcommenttxt, :originalcommentid, :articleid)", nativeQuery = true)
+    @Query(value = "INSERT INTO commentcomments (commentcommentwriter, commentcommenttxt, originalcommentid, articleid) VALUES (:commentcommentwriter, :commentcommenttxt, :originalcommentid, :articleid)", nativeQuery = true)
     void write_commentcomment(@Param("commentcommentwriter")String commentcommentwriter, @Param("commentcommenttxt")String commentcommenttxt, @Param("originalcommentid")long originalcommentid, @Param("articleid")long articleid);
 
 

@@ -7,7 +7,7 @@
 <body>
 <div th:fragment="commentFragment" id="commentFragment">
     <div class="comment_write_div">
-        <form th:action="@{/commentwrite/{id}(id=${article.articleid})}" method="post">
+        <form th:action="@{/commentwrite/{id}(id=${article.articleid})}" method="post" id="write_comment_form">
         <div>
             <div>작성자</div>
             <div>
@@ -17,13 +17,14 @@
         </div>
         <div>
             <div>
-                <input type="text" name="commenttxt" class="commenttxtinput">
-                <button type="submit" class="commentsubmitbtn">입력</button>
+                <input type="text" name="commenttxt" class="commenttxtinput" id="comment_write_txt">
+                <button type="submit" class="commentsubmitbtn" onclick="write_comment_btn_clicked();">입력</button>
             </div>
         </div>
         </form>
     </div>
 
+<!-- 댓글 목록 시작~~-->
     <div class="comment_list_table">
         <div class="comment_header_div">
             <div class="writer_header">작성자</div>
@@ -48,7 +49,6 @@
 
     <script th:inline="javascript">
 
-            console.log('로그인 아이디 : ',loginid);
 
         function writecommentcomment(div){
 
@@ -102,6 +102,7 @@
                 created_noname_radiobtn.setAttribute("type", "radio");
                 created_noname_radiobtn.setAttribute("name", "writer");
                 created_noname_radiobtn.setAttribute("value", "익명");
+                created_noname_radiobtn.setAttribute("checked", "checked");
                 select_writer_div.appendChild(created_noname_radiobtn);
 
                 //익명-라벨
@@ -116,6 +117,7 @@
                 created_loginid_radiobtn.setAttribute("type", "radio");
                 created_loginid_radiobtn.setAttribute("name", "writer");
                 created_loginid_radiobtn.setAttribute("value", loginid);
+                created_loginid_radiobtn.setAttribute("onclick", "reply_login_check();")
                 select_writer_div.appendChild(created_loginid_radiobtn);
 
                 //로그인 아이디 라벨
@@ -254,6 +256,15 @@
 
         function write_comment_with_login_id(){
             console.log(loginid);
+            if(loginid==null){
+                var result = confirm("로그인 하시겠습니까???");
+                if(result){
+                    location.href="/login";
+                }
+            }
+        }
+
+        function reply_login_check(){
             if(loginid==null){
                 var result = confirm("로그인 하시겠습니까???");
                 if(result){

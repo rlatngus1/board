@@ -154,13 +154,11 @@
         </div>
     </div>
 
-    <img th:src="@{C:/upload/}+${article.articleimgsrc}"></img>
     <hr style="margin-top: 20px; margin-bottom: 30px;" >
 
     <script th:inline="javascript">
 
         const loginid = [[${session.loginid}]]
-        const articleid = [[${article.articleid}]]
 
         const param = {
             'loginid' : loginid,
